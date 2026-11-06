@@ -1,27 +1,24 @@
-// Admin dashboard: manage menu, orders, reservations, and see analytics
-import { useState } from "react"; // hook for state
-import { Link } from "react-router-dom"; // link to login
-import "./Admin.css"; // admin styles
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import "./Admin.css";
 
-// empty menu form values
 const emptyItem = {
-  name: "", // item name
-  category: "Mains", // section
-  description: "", // short info
-  ingredients: "", // what is inside
-  price: "", // price
-  dietary: "", // tags, comma separated (e.g. "Vegetarian, Gluten-Free")
-  emoji: "🍽️", // picture
+  name: "",
+  category: "Mains",
+  description: "",
+  ingredients: "",
+  price: "",
+  dietary: "",
+  emoji: "🍽️",
 };
 
-// props come from App
-function Admin({ user, menu, setMenu, orders, updateOrderStatus, reservations, updateReservation }) {
-  const [tab, setTab] = useState("menu"); // which tab is open
-  const [form, setForm] = useState(emptyItem); // menu form data
-  const [editId, setEditId] = useState(null); // id of item being edited (null = adding new)
-  const [error, setError] = useState(""); // form error
+export default function Admin({ user, menu, setMenu, orders, updateOrderStatus, reservations, updateReservation }) {
+  const [tab, setTab] = useState("menu");
+  const [form, setForm] = useState(emptyItem);
+  const [editId, setEditId] = useState(null);
+  const [error, setError] = useState("");
 
-  // ---------- PROTECT THE PAGE: only admins can see it ----------
+  // Restrict access to admins only
   if (!user || user.role !== "admin") {
     return (
       <div className="page center">
@@ -31,76 +28,79 @@ function Admin({ user, menu, setMenu, orders, updateOrderStatus, reservations, u
     );
   }
 
-  // ---------- MENU: CREATE / UPDATE / DELETE ----------
-  // update one form field
-  function handleChange(e) {
-    setForm({ ...form, [e.target.name]: e.target.value }); // change only this field
-  }
+  // Handle form input changes
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-  // save a new item or the edited item
-  function handleSubmit(e) {
-    e.preventDefault(); // stop page reload
+  // Add or update menu item
+  const handleSubmit = (e) => {
+    e.preventDefault();
     if (!form.name || !form.description || !form.price) {
-      setError("Name, description and price are required."); // missing fields
-      return; // stop
+      setError("Name, description, and price are required.");
+      return;
     }
     if (Number(form.price) <= 0) {
-      setError("Price must be more than 0."); // bad price
-      return; // stop
+      setError("Price must be greater than 0.");
+      return;
     }
-    // turn the form into a menu item
-    const item = {
-      ...form, // all form fields
-      price: Number(form.price), // text to number
-      dietary: form.dietary ? form.dietary.split(",").map((d) => d.trim()) : [], // text to list
+
+    const newItem = {
+      ...form,
+      price: Number(form.price),
+      dietary: form.dietary ? form.dietary.split(",").map((d) => d.trim()) : [],
     };
+
     if (editId) {
-      // UPDATE: replace the old item
-      setMenu(menu.map((m) => (m.id === editId ? { ...m, ...item } : m)));
+      setMenu(menu.map((item) => (item.id === editId ? { ...item, ...newItem } : item)));
     } else {
-      // CREATE: add a new item
-      setMenu([...menu, { ...item, id: Date.now(), available: true }]);
+      setMenu([...menu, { ...newItem, id: Date.now(), available: true }]);
     }
-    setForm(emptyItem); // clear form
-    setEditId(null); // back to "add" mode
-    setError(""); // clear error
-  }
 
-  // put an item in the form to edit it
-  function startEdit(item) {
-    setForm({ ...item, dietary: item.dietary.join(", ") }); // fill the form
-    setEditId(item.id); // remember which one
-    window.scrollTo(0, 0); // scroll up to the form
-  }
+    setForm(emptyItem);
+    setEditId(null);
+    setError("");
+  };
 
-  // DELETE an item
-  function deleteItem(id) {
-    if (window.confirm("Delete this item?")) {
-      setMenu(menu.filter((m) => m.id !== id)); // keep all others
+  // Load item data into form for editing
+  const startEdit = (item) => {
+    setForm({ ...item, dietary: item.dietary.join(", ") });
+    setEditId(item.id);
+    window.scrollTo(0, 0);
+  };
+
+  // Delete menu item
+  const deleteItem = (id) => {
+    if (window.confirm("Are you sure you want to delete this item?")) {
+      setMenu(menu.filter((item) => item.id !== id));
     }
-  }
+  };
 
-  // turn available on/off
-  function toggleAvailable(id) {
-    setMenu(menu.map((m) => (m.id === id ? { ...m, available: !m.available } : m))); // flip true/false
-  }
+  // Toggle item availability
+  const toggleAvailable = (id) => {
+    setMenu(menu.map((item) => (item.id === id ? { ...item, available: !item.available } : item)));
+  };
 
-  // ---------- ANALYTICS ----------
-  const totalSales = orders.reduce((sum, o) => sum + o.total, 0); // money from all orders
-  const today = new Date().toLocaleDateString(); // today's date text
-  const ordersToday = orders.filter((o) => o.date.startsWith(today)).length; // orders placed today
+  // Analytics calculations
+  const totalSales = orders.reduce((sum, order) => sum + order.total, 0);
+  const today = new Date().toLocaleDateString();
+  const ordersToday = orders.filter((order) => order.date.startsWith(today)).length;
 
-  // count how many times each item was ordered
-  const counts = {}; // { "Chicken Alfredo": 5, ... }
-  orders.forEach((o) => o.items.forEach((i) => (counts[i.name] = (counts[i.name] || 0) + i.qty)));
-  const popular = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 5); // top 5
-  const maxCount = popular.length ? popular[0][1] : 1; // biggest number for the bars
+  const itemCounts = {};
+  orders.forEach((order) => {
+    order.items.forEach((item) => {
+      itemCounts[item.name] = (itemCounts[item.name] || 0) + item.qty;
+    });
+  });
+
+  const popularItems = Object.entries(itemCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  const maxCount = popularItems.length ? popularItems[0][1] : 1;
 
   return (
     <div className="page">
       <h1 className="page-title">ADMIN DASHBOARD</h1>
 
-      {/* TABS */}
+      {/* Navigation Tabs */}
       <div className="tabs">
         <button className={tab === "menu" ? "active" : ""} onClick={() => setTab("menu")}>Menu</button>
         <button className={tab === "orders" ? "active" : ""} onClick={() => setTab("orders")}>Orders ({orders.length})</button>
@@ -108,10 +108,9 @@ function Admin({ user, menu, setMenu, orders, updateOrderStatus, reservations, u
         <button className={tab === "analytics" ? "active" : ""} onClick={() => setTab("analytics")}>Analytics</button>
       </div>
 
-      {/* ---------- MENU TAB ---------- */}
+      {/* Menu Tab */}
       {tab === "menu" && (
         <div>
-          {/* add / edit form */}
           <form className="form" onSubmit={handleSubmit}>
             <h2>{editId ? "Edit Item" : "Add New Item"}</h2>
             <div className="row">
@@ -130,10 +129,11 @@ function Admin({ user, menu, setMenu, orders, updateOrderStatus, reservations, u
             <input name="description" placeholder="Description *" value={form.description} onChange={handleChange} />
             <input name="ingredients" placeholder="Ingredients" value={form.ingredients} onChange={handleChange} />
             <input name="dietary" placeholder="Diet tags (Vegetarian, Gluten-Free)" value={form.dietary} onChange={handleChange} />
+            
             {error && <p className="error">{error}</p>}
+            
             <div className="row">
               <button type="submit" className="btn">{editId ? "Save Changes" : "Add Item"}</button>
-              {/* cancel only while editing */}
               {editId && (
                 <button type="button" className="btn btn-outline-dark" onClick={() => { setForm(emptyItem); setEditId(null); }}>
                   Cancel
@@ -142,27 +142,31 @@ function Admin({ user, menu, setMenu, orders, updateOrderStatus, reservations, u
             </div>
           </form>
 
-          {/* menu table */}
           <div className="table-wrap">
             <table>
               <thead>
-                <tr><th>Item</th><th>Category</th><th>Price</th><th>Available</th><th>Actions</th></tr>
+                <tr>
+                  <th>Item</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Available</th>
+                  <th>Actions</th>
+                </tr>
               </thead>
               <tbody>
-                {menu.map((m) => (
-                  <tr key={m.id}>
-                    <td>{m.emoji} {m.name}</td>
-                    <td>{m.category}</td>
-                    <td>${m.price.toFixed(2)}</td>
+                {menu.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.emoji} {item.name}</td>
+                    <td>{item.category}</td>
+                    <td>${item.price.toFixed(2)}</td>
                     <td>
-                      {/* click to switch available / sold out */}
-                      <button className={m.available ? "pill on" : "pill off"} onClick={() => toggleAvailable(m.id)}>
-                        {m.available ? "Yes" : "Sold out"}
+                      <button className={item.available ? "pill on" : "pill off"} onClick={() => toggleAvailable(item.id)}>
+                        {item.available ? "Yes" : "Sold out"}
                       </button>
                     </td>
                     <td>
-                      <button className="btn btn-small" onClick={() => startEdit(m)}>Edit</button>
-                      <button className="btn btn-small btn-danger" onClick={() => deleteItem(m.id)}>Delete</button>
+                      <button className="btn btn-small" onClick={() => startEdit(item)}>Edit</button>
+                      <button className="btn btn-small btn-danger" onClick={() => deleteItem(item.id)}>Delete</button>
                     </td>
                   </tr>
                 ))}
@@ -172,20 +176,20 @@ function Admin({ user, menu, setMenu, orders, updateOrderStatus, reservations, u
         </div>
       )}
 
-      {/* ---------- ORDERS TAB ---------- */}
+      {/* Orders Tab */}
       {tab === "orders" && (
         <div>
           {orders.length === 0 && <p className="empty">No orders yet.</p>}
-          {orders.map((o) => (
-            <div key={o.id} className="order-box">
+          {orders.map((order) => (
+            <div key={order.id} className="order-box">
               <div className="order-top">
-                <b>#{o.id} · {o.customer}</b>
-                <span>{o.date}</span>
+                <b>#{order.id} · {order.customer}</b>
+                <span>{order.date}</span>
               </div>
-              <p>{o.items.map((i) => i.qty + "× " + i.name).join(", ")}</p>
-              <p><b>${o.total.toFixed(2)}</b> · {o.type} {o.address && "· " + o.address}</p>
-              {/* admin picks the new status */}
-              <select value={o.status} onChange={(e) => updateOrderStatus(o.id, e.target.value)}>
+              <p>{order.items.map((i) => `${i.qty}× ${i.name}`).join(", ")}</p>
+              <p><b>${order.total.toFixed(2)}</b> · {order.type} {order.address && `· ${order.address}`}</p>
+              
+              <select value={order.status} onChange={(e) => updateOrderStatus(order.id, e.target.value)}>
                 <option>Pending</option>
                 <option>Preparing</option>
                 <option>Ready</option>
@@ -196,23 +200,23 @@ function Admin({ user, menu, setMenu, orders, updateOrderStatus, reservations, u
         </div>
       )}
 
-      {/* ---------- RESERVATIONS TAB ---------- */}
+      {/* Reservations Tab */}
       {tab === "reservations" && (
         <div>
           {reservations.length === 0 && <p className="empty">No reservations yet.</p>}
-          {reservations.map((r) => (
-            <div key={r.id} className="order-box">
+          {reservations.map((res) => (
+            <div key={res.id} className="order-box">
               <div className="order-top">
-                <b>{r.name} · {r.type} · {r.guests} guests</b>
-                <span className={"status " + r.status}>{r.status}</span>
+                <b>{res.name} · {res.type} · {res.guests} guests</b>
+                <span className={`status ${res.status}`}>{res.status}</span>
               </div>
-              <p>📅 {r.date} at {r.time} · 📞 {r.phone}</p>
-              {r.notes && <p>📝 {r.notes}</p>}
-              {/* approve / cancel buttons only while pending */}
-              {r.status === "Pending" && (
+              <p>📅 {res.date} at {res.time} · 📞 {res.phone}</p>
+              {res.notes && <p>📝 {res.notes}</p>}
+              
+              {res.status === "Pending" && (
                 <div className="row">
-                  <button className="btn btn-small" onClick={() => updateReservation(r.id, "Approved")}>Approve</button>
-                  <button className="btn btn-small btn-danger" onClick={() => updateReservation(r.id, "Cancelled")}>Cancel</button>
+                  <button className="btn btn-small" onClick={() => updateReservation(res.id, "Approved")}>Approve</button>
+                  <button className="btn btn-small btn-danger" onClick={() => updateReservation(res.id, "Cancelled")}>Cancel</button>
                 </div>
               )}
             </div>
@@ -220,10 +224,9 @@ function Admin({ user, menu, setMenu, orders, updateOrderStatus, reservations, u
         </div>
       )}
 
-      {/* ---------- ANALYTICS TAB ---------- */}
+      {/* Analytics Tab */}
       {tab === "analytics" && (
         <div>
-          {/* number boxes */}
           <div className="stats">
             <div className="stat"><span>{orders.length}</span>Total Orders</div>
             <div className="stat"><span>{ordersToday}</span>Orders Today</div>
@@ -231,13 +234,12 @@ function Admin({ user, menu, setMenu, orders, updateOrderStatus, reservations, u
             <div className="stat"><span>{reservations.length}</span>Reservations</div>
           </div>
 
-          {/* popular items bar chart */}
           <h2 className="category-title">POPULAR ITEMS</h2>
-          {popular.length === 0 && <p className="empty">Place some orders to see the chart.</p>}
-          {popular.map(([name, count]) => (
+          {popularItems.length === 0 && <p className="empty">Place some orders to see the chart.</p>}
+          {popularItems.map(([name, count]) => (
             <div key={name} className="bar-row">
               <span className="bar-label">{name}</span>
-              <div className="bar" style={{ width: (count / maxCount) * 100 + "%" }}>{count}</div>
+              <div className="bar" style={{ width: `${(count / maxCount) * 100}%` }}>{count}</div>
             </div>
           ))}
         </div>
@@ -245,6 +247,3 @@ function Admin({ user, menu, setMenu, orders, updateOrderStatus, reservations, u
     </div>
   );
 }
-
-// share Admin with App.jsx
-export default Admin;
