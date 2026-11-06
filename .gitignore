@@ -1,0 +1,4 @@
+# never upload these
+node_modules
+dist
+.env

@@ -1,0 +1,105 @@
+/* AI chat box styles */
+
+.chat-toggle {
+  position: fixed; /* stays on screen */
+  bottom: 24px; /* from bottom */
+  right: 24px; /* from right */
+  width: 62px; /* circle size */
+  height: 62px; /* circle size */
+  border-radius: 50%; /* circle */
+  border: none; /* no border */
+  background: var(--yellow); /* yellow */
+  font-size: 28px; /* icon size */
+  cursor: pointer; /* hand */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3); /* shadow */
+  z-index: 60; /* above page */
+}
+
+.chat-box {
+  position: fixed; /* stays on screen */
+  bottom: 100px; /* above the button */
+  right: 24px; /* from right */
+  width: 340px; /* box width */
+  max-width: calc(100vw - 32px); /* fit phones */
+  height: 480px; /* box height */
+  background: white; /* white */
+  border-radius: 20px; /* round */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* shadow */
+  display: flex; /* stack */
+  flex-direction: column; /* top to bottom */
+  overflow: hidden; /* round corners */
+  z-index: 60; /* above page */
+}
+
+.chat-header {
+  background: var(--red); /* red header */
+  color: var(--yellow); /* yellow text */
+  padding: 14px; /* space */
+  font-family: "Anton", sans-serif; /* title font */
+  letter-spacing: 1px; /* letter space */
+}
+
+.chat-messages {
+  flex: 1; /* take free space */
+  overflow-y: auto; /* scroll messages */
+  padding: 12px; /* space */
+  display: flex; /* stack */
+  flex-direction: column; /* top to bottom */
+  gap: 8px; /* space */
+}
+
+.msg {
+  padding: 8px 12px; /* bubble size */
+  border-radius: 14px; /* round bubble */
+  max-width: 85%; /* not too wide */
+  font-size: 14px; /* text size */
+}
+
+.msg.bot {
+  background: #ffe9b0; /* yellow bubble */
+  align-self: flex-start; /* left side */
+}
+
+.msg.user {
+  background: var(--red); /* red bubble */
+  color: white; /* white text */
+  align-self: flex-end; /* right side */
+}
+
+.chat-quick {
+  display: flex; /* buttons in a row */
+  gap: 6px; /* space */
+  overflow-x: auto; /* scroll sideways */
+  padding: 8px; /* space */
+  border-top: 1px solid #eee; /* line above */
+}
+
+.chat-quick button {
+  flex-shrink: 0; /* don't squeeze */
+  border: 1px solid var(--red); /* red border */
+  background: white; /* white */
+  color: var(--red); /* red text */
+  border-radius: 20px; /* pill */
+  padding: 5px 10px; /* size */
+  font-size: 12px; /* small */
+  cursor: pointer; /* hand */
+}
+
+.chat-form {
+  display: flex; /* input and button */
+  border-top: 1px solid #eee; /* line above */
+}
+
+.chat-form input {
+  border: none; /* no border */
+  border-radius: 0; /* square */
+}
+
+.chat-form button {
+  background: var(--red); /* red */
+  color: white; /* white text */
+  border: none; /* no border */
+  padding: 0 18px; /* size */
+  cursor: pointer; /* hand */
+}
+

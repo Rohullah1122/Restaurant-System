@@ -1,0 +1,687 @@
+/* ========== COLORS (change them here) ========== */
+:root {
+  --red: #c8102e; /* main red */
+  --dark-red: #7a0919; /* deep red for backgrounds */
+  --yellow: #ffc72c; /* main yellow */
+  --cream: #fff6e0; /* light background */
+  --text: #2b1a12; /* dark text */
+}
+
+/* ========== BASIC SETUP ========== */
+* {
+  box-sizing: border-box; /* padding stays inside the width */
+  margin: 0; /* remove default space */
+}
+
+body {
+  font-family: "Poppins", sans-serif; /* normal text font */
+  background: var(--cream); /* page color */
+  color: var(--text); /* text color */
+}
+
+a {
+  text-decoration: none; /* no underline on links */
+  color: inherit; /* same color as parent */
+}
+
+h1, h2, h3 {
+  font-family: "Anton", sans-serif; /* big bold font for titles */
+  letter-spacing: 1px; /* small space between letters */
+  font-weight: normal; /* Anton is already bold */
+}
+
+input, select, textarea {
+  font: inherit; /* same font as the page */
+  padding: 12px; /* space inside */
+  border: 2px solid #e8d4a8; /* light border */
+  border-radius: 10px; /* round corners */
+  background: white; /* white box */
+  width: 100%; /* full width */
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none; /* remove blue outline */
+  border-color: var(--red); /* red border when typing */
+}
+
+/* ========== BUTTONS ========== */
+.btn {
+  display: inline-block; /* works for links and buttons */
+  background: var(--red); /* red button */
+  color: white; /* white text */
+  border: none; /* no border */
+  padding: 12px 26px; /* size */
+  border-radius: 30px; /* pill shape */
+  font-family: "Anton", sans-serif; /* title font */
+  letter-spacing: 1px; /* letter space */
+  font-size: 16px; /* text size */
+  cursor: pointer; /* hand on hover */
+  transition: transform 0.2s, background 0.2s; /* smooth hover */
+}
+
+.btn:hover {
+  transform: scale(1.05); /* grow a little */
+  background: var(--dark-red); /* darker red */
+}
+
+.btn:disabled {
+  background: #aaa; /* grey when disabled */
+  cursor: not-allowed; /* "no" cursor */
+  transform: none; /* no grow */
+}
+
+.btn-yellow {
+  background: var(--yellow); /* yellow button */
+  color: var(--dark-red); /* red text */
+}
+
+.btn-outline {
+  background: transparent; /* see-through */
+  border: 2px solid var(--yellow); /* yellow border */
+  color: var(--yellow); /* yellow text */
+}
+
+.btn-outline-dark {
+  background: transparent; /* see-through */
+  border: 2px solid var(--red); /* red border */
+  color: var(--red); /* red text */
+}
+
+.btn-small {
+  padding: 6px 14px; /* smaller button */
+  font-size: 13px; /* smaller text */
+  margin: 4px 6px 0 0; /* space around */
+}
+
+.btn-danger {
+  background: #333; /* dark button for delete/cancel */
+}
+
+.link-btn {
+  background: none; /* looks like a link */
+  border: none; /* no border */
+  color: inherit; /* same color */
+  font: inherit; /* same font */
+  cursor: pointer; /* hand on hover */
+}
+
+.link-btn.dark {
+  color: var(--red); /* red link on light pages */
+}
+
+/* ========== NAVBAR ========== */
+.navbar {
+  position: sticky; /* stays at the top when scrolling */
+  top: 0; /* stick to top */
+  z-index: 50; /* above other things */
+  display: flex; /* items in a row */
+  justify-content: space-between; /* logo left, links right */
+  align-items: center; /* center vertically */
+  padding: 14px 30px; /* space inside */
+  background: var(--red); /* red bar */
+  color: white; /* white text */
+}
+
+.logo {
+  font-family: "Anton", sans-serif; /* title font */
+  font-size: 28px; /* big */
+  color: var(--yellow); /* yellow logo */
+  letter-spacing: 2px; /* letter space */
+}
+
+.nav-links {
+  display: flex; /* links in a row */
+  gap: 22px; /* space between links */
+  align-items: center; /* center vertically */
+  font-family: "Anton", sans-serif; /* title font */
+  letter-spacing: 1px; /* letter space */
+  text-transform: uppercase; /* CAPITAL letters */
+}
+
+.nav-links a.active {
+  color: var(--yellow); /* current page is yellow */
+}
+
+.badge {
+  background: var(--yellow); /* yellow circle */
+  color: var(--dark-red); /* red number */
+  border-radius: 50%; /* round */
+  padding: 2px 8px; /* size */
+  font-size: 13px; /* small */
+}
+
+.menu-btn {
+  display: none; /* hidden on big screens */
+  background: none; /* no background */
+  border: none; /* no border */
+  color: white; /* white icon */
+  font-size: 28px; /* big icon */
+  cursor: pointer; /* hand on hover */
+}
+
+/* ========== INTRO (full screen welcome) ========== */
+.intro {
+  position: fixed; /* cover the whole screen */
+  inset: 0; /* top, right, bottom, left = 0 */
+  z-index: 100; /* above everything */
+  background: radial-gradient(circle, var(--red), var(--dark-red)); /* glowing red */
+  display: flex; /* center content */
+  flex-direction: column; /* top to bottom */
+  justify-content: center; /* center vertically */
+  align-items: center; /* center horizontally */
+  color: white; /* white text */
+  overflow: hidden; /* hide food outside the screen */
+  animation: introFade 6s forwards; /* fade out at the end */
+}
+
+.intro-title {
+  font-size: clamp(60px, 14vw, 180px); /* huge, but fits phones */
+  color: var(--yellow); /* yellow title */
+  animation: zoomIn 2s ease-out; /* grows in */
+  z-index: 1; /* above food */
+}
+
+.intro-small {
+  font-family: "Anton", sans-serif; /* title font */
+  font-size: clamp(18px, 3vw, 30px); /* medium */
+  letter-spacing: 3px; /* wide letters */
+  animation: fadeUp 2.5s ease-out; /* slides up */
+  z-index: 1; /* above food */
+}
+
+.skip-btn {
+  position: absolute; /* place it at the bottom */
+  bottom: 40px; /* from the bottom */
+  background: rgba(255, 255, 255, 0.2); /* glass look */
+  color: white; /* white text */
+  border: 1px solid white; /* thin border */
+  padding: 10px 24px; /* size */
+  font-family: "Anton", sans-serif; /* title font */
+  letter-spacing: 2px; /* letter space */
+  cursor: pointer; /* hand on hover */
+  z-index: 1; /* above food */
+}
+
+/* ========== FLOATING FOOD (our "flying pigs") ========== */
+.floating-food {
+  position: absolute; /* fill the parent */
+  inset: 0; /* full size */
+  pointer-events: none; /* clicks go through */
+  overflow: hidden; /* hide food outside */
+}
+
+.food {
+  position: absolute; /* free position */
+  bottom: -80px; /* start below the screen */
+  opacity: 0.85; /* a little see-through */
+  animation-name: floatUp; /* the animation below */
+  animation-timing-function: linear; /* same speed */
+  animation-iteration-count: infinite; /* repeat forever */
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.3)); /* soft shadow */
+}
+
+/* ========== HOME PAGE ========== */
+.hero {
+  position: relative; /* for the floating food */
+  min-height: 85vh; /* almost full screen */
+  background: radial-gradient(circle at center, var(--red), var(--dark-red)); /* glowing red */
+  color: white; /* white text */
+  display: flex; /* center content */
+  flex-direction: column; /* top to bottom */
+  justify-content: center; /* center vertically */
+  align-items: center; /* center horizontally */
+  text-align: center; /* center text */
+  padding: 40px 20px; /* space inside */
+  overflow: hidden; /* hide food outside */
+}
+
+.hero-title {
+  font-size: clamp(64px, 13vw, 170px); /* huge title */
+  color: var(--yellow); /* yellow */
+  line-height: 1; /* tight lines */
+  z-index: 1; /* above food */
+  text-shadow: 0 6px 20px rgba(0, 0, 0, 0.35); /* glow shadow */
+}
+
+.hero-small, .hero-sub {
+  font-family: "Anton", sans-serif; /* title font */
+  letter-spacing: 2px; /* wide letters */
+  font-size: clamp(16px, 2.5vw, 26px); /* medium */
+  z-index: 1; /* above food */
+  margin: 10px 0; /* space */
+}
+
+.hero-buttons {
+  display: flex; /* buttons in a row */
+  gap: 16px; /* space between */
+  margin-top: 24px; /* space above */
+  flex-wrap: wrap; /* go to next line on phones */
+  justify-content: center; /* center */
+  z-index: 1; /* above food */
+}
+
+.section {
+  padding: 60px 30px; /* space inside */
+  max-width: 1150px; /* not too wide */
+  margin: 0 auto; /* center */
+  text-align: center; /* center text */
+}
+
+.section h2 {
+  font-size: 44px; /* big title */
+  color: var(--red); /* red */
+  margin-bottom: 20px; /* space below */
+}
+
+.about p {
+  font-size: 18px; /* bigger text */
+  max-width: 700px; /* short lines */
+  margin: 0 auto; /* center */
+  line-height: 1.7; /* easy to read */
+}
+
+.events {
+  background: var(--yellow); /* yellow box */
+  border-radius: 30px; /* round corners */
+  margin-bottom: 60px; /* space below */
+}
+
+.events p {
+  margin-bottom: 20px; /* space below */
+}
+
+/* ========== PAGES ========== */
+.page {
+  max-width: 1150px; /* not too wide */
+  margin: 0 auto; /* center */
+  padding: 40px 24px 80px; /* space inside */
+}
+
+.page.center {
+  text-align: center; /* center text */
+  min-height: 60vh; /* tall enough */
+}
+
+.page.center p {
+  margin: 10px 0; /* space between lines */
+}
+
+.page-title {
+  font-size: clamp(36px, 6vw, 64px); /* big title */
+  color: var(--red); /* red */
+  text-align: center; /* center */
+  margin-bottom: 30px; /* space below */
+}
+
+.category-title {
+  font-size: 32px; /* medium-big */
+  color: var(--red); /* red */
+  border-bottom: 4px solid var(--yellow); /* yellow line under */
+  display: inline-block; /* line only under the text */
+  margin: 30px 0 18px; /* space */
+}
+
+/* ========== MENU ========== */
+.filters {
+  display: grid; /* grid layout */
+  grid-template-columns: 2fr 1fr 1fr 1.3fr; /* 4 columns */
+  gap: 12px; /* space between */
+  background: white; /* white box */
+  padding: 16px; /* space inside */
+  border-radius: 16px; /* round corners */
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08); /* soft shadow */
+}
+
+.price-filter {
+  font-size: 14px; /* small label */
+  display: flex; /* label and slider */
+  flex-direction: column; /* top to bottom */
+}
+
+.price-filter input {
+  padding: 0; /* slider needs no padding */
+  border: none; /* no border */
+  accent-color: var(--red); /* red slider */
+}
+
+.grid {
+  display: grid; /* grid layout */
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); /* as many cards as fit */
+  gap: 22px; /* space between cards */
+  text-align: left; /* left text in cards */
+}
+
+.card {
+  background: white; /* white card */
+  border-radius: 20px; /* round corners */
+  padding: 20px; /* space inside */
+  box-shadow: 0 6px 18px rgba(122, 9, 25, 0.1); /* soft red shadow */
+  display: flex; /* stack content */
+  flex-direction: column; /* top to bottom */
+  gap: 8px; /* space between */
+  transition: transform 0.25s; /* smooth hover */
+  border-top: 6px solid var(--yellow); /* yellow top line */
+}
+
+.card:hover {
+  transform: translateY(-6px); /* lift up */
+}
+
+.card.sold-out {
+  opacity: 0.55; /* faded when sold out */
+}
+
+.card-emoji {
+  font-size: 64px; /* big picture */
+  text-align: center; /* center */
+  animation: bob 3s ease-in-out infinite; /* gentle floating */
+}
+
+.card-top {
+  display: flex; /* name and price in a row */
+  justify-content: space-between; /* far apart */
+  align-items: center; /* center */
+}
+
+.card h3 {
+  font-size: 22px; /* name size */
+  color: var(--dark-red); /* dark red */
+}
+
+.price {
+  background: var(--yellow); /* yellow price tag */
+  color: var(--dark-red); /* red text */
+  font-weight: 600; /* bold */
+  padding: 4px 10px; /* size */
+  border-radius: 20px; /* pill */
+}
+
+.card p {
+  font-size: 14px; /* small text */
+}
+
+.ingredients {
+  color: #7a6a5c; /* grey-brown */
+}
+
+.tags {
+  display: flex; /* tags in a row */
+  gap: 6px; /* space */
+  flex-wrap: wrap; /* wrap */
+  min-height: 24px; /* keep cards same height */
+}
+
+.tag {
+  font-size: 12px; /* small */
+  background: #ffe9b0; /* light yellow */
+  padding: 3px 10px; /* size */
+  border-radius: 20px; /* pill */
+}
+
+.card .btn {
+  margin-top: auto; /* push button to the bottom */
+}
+
+.empty {
+  text-align: center; /* center */
+  margin: 30px 0; /* space */
+  font-size: 18px; /* bigger */
+}
+
+/* ========== FORMS ========== */
+.form {
+  background: white; /* white box */
+  padding: 26px; /* space inside */
+  border-radius: 20px; /* round corners */
+  display: flex; /* stack fields */
+  flex-direction: column; /* top to bottom */
+  gap: 14px; /* space between fields */
+  max-width: 650px; /* not too wide */
+  margin: 0 auto 30px; /* center */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08); /* soft shadow */
+}
+
+.small-form {
+  max-width: 420px; /* smaller login form */
+}
+
+.form h2 {
+  color: var(--red); /* red title */
+}
+
+.row {
+  display: flex; /* side by side */
+  gap: 12px; /* space between */
+}
+
+.row > * {
+  flex: 1; /* equal width */
+}
+
+.row label {
+  display: flex; /* label above input */
+  flex-direction: column; /* top to bottom */
+  font-size: 14px; /* small label */
+  gap: 4px; /* space */
+}
+
+.radio-row {
+  display: flex; /* radios in a row */
+  gap: 24px; /* space */
+}
+
+.radio-row input {
+  width: auto; /* normal radio size */
+  margin-right: 6px; /* space after */
+  accent-color: var(--red); /* red radio */
+}
+
+textarea {
+  min-height: 90px; /* taller box */
+}
+
+.error {
+  color: var(--red); /* red message */
+  font-weight: 600; /* bold */
+}
+
+.success {
+  color: #1e7b34; /* green message */
+  font-weight: 600; /* bold */
+}
+
+.note {
+  font-size: 13px; /* small */
+  color: #7a6a5c; /* grey-brown */
+}
+
+/* ========== CART ========== */
+.cart-list {
+  max-width: 750px; /* not too wide */
+  margin: 0 auto 26px; /* center */
+}
+
+.cart-item {
+  display: flex; /* row */
+  align-items: center; /* center */
+  gap: 16px; /* space */
+  background: white; /* white row */
+  padding: 14px 18px; /* space inside */
+  border-radius: 16px; /* round */
+  margin-bottom: 12px; /* space below */
+}
+
+.cart-emoji {
+  font-size: 40px; /* big picture */
+}
+
+.cart-name {
+  flex: 1; /* take free space */
+}
+
+.qty {
+  display: flex; /* buttons and number */
+  align-items: center; /* center */
+  gap: 10px; /* space */
+}
+
+.qty button, .remove {
+  width: 32px; /* round button size */
+  height: 32px; /* round button size */
+  border-radius: 50%; /* circle */
+  border: none; /* no border */
+  background: var(--yellow); /* yellow */
+  font-size: 18px; /* symbol size */
+  cursor: pointer; /* hand */
+}
+
+.remove {
+  background: #f1e2e2; /* light red */
+  color: var(--red); /* red x */
+}
+
+/* ========== ORDERS / RESERVATIONS BOXES ========== */
+.order-box {
+  background: white; /* white box */
+  border-left: 6px solid var(--red); /* red line on the left */
+  padding: 16px 20px; /* space inside */
+  border-radius: 14px; /* round */
+  margin-bottom: 14px; /* space below */
+  display: flex; /* stack */
+  flex-direction: column; /* top to bottom */
+  gap: 6px; /* space */
+}
+
+.order-box select {
+  width: 200px; /* small dropdown */
+}
+
+.order-top {
+  display: flex; /* row */
+  justify-content: space-between; /* far apart */
+  flex-wrap: wrap; /* wrap on phones */
+  gap: 8px; /* space */
+}
+
+.progress {
+  display: flex; /* steps in a row */
+  gap: 6px; /* space */
+  margin-top: 6px; /* space above */
+}
+
+.step {
+  flex: 1; /* equal width */
+  text-align: center; /* center */
+  padding: 6px; /* size */
+  font-size: 13px; /* small */
+  background: #eee; /* grey = not done */
+  border-radius: 20px; /* pill */
+}
+
+.step.done {
+  background: var(--yellow); /* yellow = done */
+  font-weight: 600; /* bold */
+}
+
+.status {
+  padding: 3px 12px; /* size */
+  border-radius: 20px; /* pill */
+  font-size: 13px; /* small */
+  font-weight: 600; /* bold */
+}
+
+.status.Pending { background: #ffe9b0; } /* yellow = waiting */
+.status.Approved { background: #c9f0d1; } /* green = approved */
+.status.Cancelled { background: #f6c9c9; } /* red = cancelled */
+
+/* ========== ADMIN + CHATBOT ==========
+   🚧 Teammate's part: put these styles in src/pages/Admin.css and src/components/ChatBot.css
+   (separate files so we don't change the same file at the same time on GitHub) */
+
+/* ========== FOOTER (typewriter style) ========== */
+.footer {
+  display: flex; /* three columns */
+  justify-content: space-between; /* spread out */
+  align-items: center; /* center */
+  gap: 20px; /* space */
+  padding: 30px; /* space inside */
+  background: var(--dark-red); /* dark red */
+  color: #f5d9a8; /* light yellow text */
+  font-family: "Space Mono", monospace; /* typewriter font */
+  font-size: 12px; /* small */
+  flex-wrap: wrap; /* wrap on phones */
+}
+
+.footer-icons {
+  font-size: 34px; /* big icons */
+}
+
+.footer-right {
+  text-align: right; /* right side */
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes floatUp {
+  0% { transform: translateY(0) rotate(0deg); } /* start at the bottom */
+  50% { transform: translateY(-55vh) rotate(180deg) translateX(30px); } /* middle, turn a bit */
+  100% { transform: translateY(-115vh) rotate(360deg); } /* end above the top */
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.3); opacity: 0; } /* small and hidden */
+  to { transform: scale(1); opacity: 1; } /* normal size */
+}
+
+@keyframes fadeUp {
+  from { transform: translateY(30px); opacity: 0; } /* lower and hidden */
+  to { transform: translateY(0); opacity: 1; } /* normal */
+}
+
+@keyframes introFade {
+  85% { opacity: 1; } /* fully visible most of the time */
+  100% { opacity: 0; } /* fade out at the end */
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); } /* normal */
+  50% { transform: translateY(-8px); } /* a little up */
+}
+
+/* ========== PHONES (bonus: mobile responsive) ========== */
+@media (max-width: 800px) {
+  .menu-btn {
+    display: block; /* show the ☰ button */
+  }
+
+  .nav-links {
+    display: none; /* hide links until menu is opened */
+    position: absolute; /* drop down under the navbar */
+    top: 100%; /* right below */
+    left: 0; /* full width */
+    right: 0; /* full width */
+    flex-direction: column; /* links top to bottom */
+    background: var(--red); /* red */
+    padding: 20px; /* space */
+  }
+
+  .nav-links.open {
+    display: flex; /* show when open */
+  }
+
+  .filters {
+    grid-template-columns: 1fr; /* one column */
+  }
+
+  .row {
+    flex-direction: column; /* stack fields */
+  }
+
+  .cart-item {
+    flex-wrap: wrap; /* wrap cart rows */
+  }
+
+  .footer, .footer-right {
+    text-align: center; /* center footer */
+    justify-content: center; /* center */
+  }
+}

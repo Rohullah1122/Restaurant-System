@@ -1,0 +1,101 @@
+/* Admin dashboard styles (tabs, table, stats, charts) */
+
+.tabs {
+  display: flex; /* tabs in a row */
+  gap: 8px; /* space */
+  justify-content: center; /* center */
+  flex-wrap: wrap; /* wrap */
+  margin-bottom: 26px; /* space below */
+}
+
+.tabs button {
+  padding: 10px 20px; /* size */
+  border: 2px solid var(--red); /* red border */
+  background: white; /* white */
+  color: var(--red); /* red text */
+  border-radius: 30px; /* pill */
+  font-family: "Anton", sans-serif; /* title font */
+  letter-spacing: 1px; /* letter space */
+  cursor: pointer; /* hand */
+}
+
+.tabs button.active {
+  background: var(--red); /* red when selected */
+  color: white; /* white text */
+}
+
+.table-wrap {
+  overflow-x: auto; /* scroll sideways on phones */
+}
+
+table {
+  width: 100%; /* full width */
+  border-collapse: collapse; /* no double borders */
+  background: white; /* white table */
+  border-radius: 14px; /* round */
+  overflow: hidden; /* keep round corners */
+}
+
+th {
+  background: var(--red); /* red header */
+  color: white; /* white text */
+  text-align: left; /* left */
+  padding: 12px; /* space */
+}
+
+td {
+  padding: 10px 12px; /* space */
+  border-bottom: 1px solid #f3e6c8; /* light line */
+}
+
+.pill {
+  border: none; /* no border */
+  padding: 4px 12px; /* size */
+  border-radius: 20px; /* pill */
+  cursor: pointer; /* hand */
+  font-weight: 600; /* bold */
+}
+
+.pill.on { background: #c9f0d1; } /* green = available */
+.pill.off { background: #f6c9c9; } /* red = sold out */
+
+.stats {
+  display: grid; /* grid */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* boxes that fit */
+  gap: 16px; /* space */
+}
+
+.stat {
+  background: var(--red); /* red box */
+  color: white; /* white text */
+  border-radius: 20px; /* round */
+  padding: 22px; /* space */
+  text-align: center; /* center */
+}
+
+.stat span {
+  display: block; /* own line */
+  font-family: "Anton", sans-serif; /* title font */
+  font-size: 40px; /* big number */
+  color: var(--yellow); /* yellow number */
+}
+
+.bar-row {
+  display: flex; /* label and bar */
+  align-items: center; /* center */
+  gap: 12px; /* space */
+  margin-bottom: 10px; /* space below */
+}
+
+.bar-label {
+  width: 180px; /* fixed label width */
+}
+
+.bar {
+  background: var(--yellow); /* yellow bar */
+  padding: 6px 10px; /* size */
+  border-radius: 20px; /* pill */
+  font-weight: 600; /* bold */
+  min-width: 40px; /* always visible */
+}
+
