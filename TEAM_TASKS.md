@@ -74,4 +74,3 @@ Props from App: `user`, `menu`, `setMenu`, `orders`, `updateOrderStatus`, `reser
 4. When a part is done: on GitHub click **Compare & pull request** → the other person checks it → **Merge**.
 5. Before starting work each day: `git checkout main` → `git pull` → `git checkout admin-chat-login` → `git merge main`
 
-⚠️ Don't edit the other person's files without asking first.
