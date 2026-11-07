@@ -4,7 +4,7 @@
 | Person | Parts | Share |
 |---|---|---|
 | **Rohullah Hussaini** | Project setup, routing, App state, Navbar, Footer, Home (intro + floating food), Menu (search + filters), MenuCard, Cart, My Orders, Reservations & events, main styles | ~70% |
-| **[Teammate name]** | Admin Dashboard, AI ChatBot (+ dataset), Login / Register page | ~30% |
+| **Mohammad Abu Hantash** | Admin Dashboard, AI ChatBot (+ dataset), Login / Register page | ~30% |
 
 Each person owns **different files**, so we don't overwrite each other's work.
 
