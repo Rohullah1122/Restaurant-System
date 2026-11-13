@@ -1,0 +1,17 @@
+flowchart LR
+    C([Customer])
+    A([Admin])
+    subgraph S [Hussaini's Restaurant]
+        U1(Browse and filter menu)
+        U2(Add items to cart)
+        U3(Place pickup or delivery order)
+        U4(View my orders)
+        U5(Book a table or event)
+        U6(Ask the AI assistant)
+        U7(Register and log in)
+        U8(Add, edit and delete menu items)
+        U9(Update order status)
+        U10(Confirm or cancel reservations)
+    end
+    C --- U1 & U2 & U3 & U4 & U5 & U6 & U7
+    A --- U7 & U8 & U9 & U10
