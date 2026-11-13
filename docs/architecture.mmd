@@ -1,0 +1,9 @@
+flowchart TB
+    D[("menuData.js · users.js<br/>starting data")] --> APP
+    APP["<b>App.jsx</b><br/>state: menu · cart · orders · reservations · accounts · user"] <-->|save / load| LS[("Browser localStorage")]
+    APP --> SH["Shared on every page<br/>Navbar · Footer · ChatBot"]
+    APP --> R{{"React Router"}}
+    R --> C1["Customer pages<br/>Home · Menu · Cart · My Orders · Reserve"]
+    R --> C2["Account<br/>Login / Register"]
+    R --> C3["Admin dashboard<br/>menu · orders · reservations"]
+    SH -.-> CD[("chatData.js<br/>assistant answers")]

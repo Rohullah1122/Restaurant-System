@@ -1,0 +1,16 @@
+sequenceDiagram
+    actor C as Customer
+    participant M as Menu page
+    participant A as App state
+    participant K as Cart page
+    participant O as My Orders
+    participant AD as Admin
+    C->>M: Search and filter
+    C->>M: Add to Cart
+    M->>A: addToCart(item)
+    C->>K: Choose pickup or delivery
+    K->>A: placeOrder(type, address)
+    A-->>A: save to localStorage
+    A->>O: order shows as Pending
+    AD->>A: updateOrderStatus(id, status)
+    A->>O: status updates
